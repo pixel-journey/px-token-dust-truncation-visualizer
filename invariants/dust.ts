@@ -35,6 +35,17 @@ export function taxBps(amount: bigint, bps: number): { tax: bigint; net: bigint 
 }
 
 /**
+ * Smallest amount that produces tax >= 1 at this bps.
+ * For bps === 0 every amount is dust (returns null).
+ */
+export function minAmountForNonDustTax(bps: number): bigint | null {
+  assertBps(bps);
+  if (bps === 0) return null;
+  // ceil(10000 / bps)
+  return (10_000n + BigInt(bps) - 1n) / BigInt(bps);
+}
+
+/**
  * Floor pro-rata reward: floor(pool * shares / totalShares).
  * When shares are tiny relative to totalShares, reward is 0.
  */

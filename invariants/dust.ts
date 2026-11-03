@@ -84,3 +84,64 @@ export function isTaxDust(amount: bigint, bps: number): boolean {
   if (amount <= 0n) return false;
   return taxBps(amount, bps).tax === 0n;
 }
+
+/** True when positive shares still yield zero reward. */
+export function isRewardDust(
+  pool: bigint,
+  shares: bigint,
+  totalShares: bigint
+): boolean {
+  if (shares <= 0n) return false;
+  return rewardShare(pool, shares, totalShares) === 0n;
+}
+
+/**
+ * Smallest shares that produce reward ≥ 1 for a given pool and totalShares.
+ * null if pool is 0 (no reward possible).
+ */
+export function minSharesForNonDustReward(
+  pool: bigint,
+  totalShares: bigint
+): bigint | null {
+  assertAmount(pool);
+  assertAmount(totalShares);
+  if (totalShares === 0n) throw new Error("totalShares must not be zero");
+  if (pool === 0n) return null;
+  // ceil(totalShares / pool)
+  const need = (totalShares + pool - 1n) / pool;
+  if (need > totalShares) return totalShares; // only full ownership might pay
+  return need;
+}
+
+/** Total tax extracted across multi-hop (amount - final net). */
+export function multiHopTaxTaken(
+  amount: bigint,
+  bps: number,
+  hops: number
+): bigint {
+  const net = multiHopNet(amount, bps, hops);
+  return amount - net;
+}
+
+/** Compare tax at two bps rates for the same amount. */
+export function compareTaxBps(
+  amount: bigint,
+  bpsA: number,
+  bpsB: number
+): { a: { tax: bigint; net: bigint }; b: { tax: bigint; net: bigint }; taxDelta: bigint } {
+  const a = taxBps(amount, bpsA);
+  const b = taxBps(amount, bpsB);
+  return { a, b, taxDelta: a.tax - b.tax };
+}
+
+/** Scan [1..limit] and count how many amounts are tax-dust at bps. */
+export function countDustAmounts(bps: number, limit: bigint): bigint {
+  assertBps(bps);
+  assertAmount(limit);
+  if (limit === 0n) return 0n;
+  let n = 0n;
+  for (let a = 1n; a <= limit; a++) {
+    if (isTaxDust(a, bps)) n++;
+  }
+  return n;
+}

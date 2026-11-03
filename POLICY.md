@@ -1,19 +1,21 @@
-# Policy — token dust truncation lab
+# Policy — dust truncation lab
 
-**Trust:** private educational lab (Tier A)  
-**Updated:** 2026-10-31
+**Trust label:** `educational-reference`  
+**Updated:** 2026-11-03
 
 ## In scope
 
-- Pure bigint `taxBps`, `rewardShare`, `multiHopNet`, `minAmountForNonDustTax`
-- Executed unit tests via `npm test`
+- Pure integer tax/reward dust helpers under `invariants/`
+- Offline unit tests and CLI demo
 
 ## Out of scope
 
-- Deployed eosio.token / wasm in this tree
-- Claims about any live WAX token’s tax schedule
+- Deployed token wasm
+- Claims about live PIXA / any mainnet tax schedule
+- Network calls
 
 ## Rules
 
-- Tests never require network
-- Document floors in product copy when dust paths exist
+1. `npm test` never requires network.
+2. Docs must document floor behavior, not “always X%”.
+3. Prefer WharfKit if a future host adds intentional chain actions.

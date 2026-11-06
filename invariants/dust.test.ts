@@ -48,6 +48,12 @@ describe("minAmountForNonDustTax", () => {
   });
 });
 
+describe("isTaxDust", () => {
+  it("zero amount is not called dust", () => {
+    assert.equal(isTaxDust(0n, 30), false);
+  });
+});
+
 describe("rewardShare", () => {
   it("tiny share is zero", () => {
     assert.equal(rewardShare(100n, 1n, 10_000n), 0n);
@@ -57,14 +63,25 @@ describe("rewardShare", () => {
   it("half pool half shares", () => {
     assert.equal(rewardShare(100n, 50n, 100n), 50n);
   });
+
+  it("refuses totalShares zero", () => {
+    assert.throws(() => rewardShare(100n, 0n, 0n), /totalShares/);
+  });
+
+  it("refuses shares above totalShares", () => {
+    assert.throws(() => rewardShare(100n, 11n, 10n), /exceed/);
+  });
 });
 
 describe("minSharesForNonDustReward", () => {
   it("finds first paying share", () => {
-    // pool 100, total 10000 → need ceil(10000/100)=100 shares for reward ≥ 1
     assert.equal(minSharesForNonDustReward(100n, 10_000n), 100n);
     assert.equal(rewardShare(100n, 99n, 10_000n), 0n);
     assert.equal(rewardShare(100n, 100n, 10_000n), 1n);
+  });
+
+  it("zero pool returns null", () => {
+    assert.equal(minSharesForNonDustReward(0n, 10_000n), null);
   });
 });
 
@@ -77,6 +94,11 @@ describe("multiHopNet", () => {
     const amount = 10_000n;
     const taken = multiHopTaxTaken(amount, 30, 3);
     assert.equal(taken + multiHopNet(amount, 30, 3), amount);
+  });
+
+  it("refuses hops out of range", () => {
+    assert.throws(() => multiHopNet(100n, 30, 0), /hops/);
+    assert.throws(() => multiHopNet(100n, 30, 33), /hops/);
   });
 });
 

@@ -2,17 +2,26 @@
 
 > **Domain:** token math — dust / truncation  
 > **Sources:** [SOURCES.md](SOURCES.md)  
-> **Catalog:** [px-contract-examples-vault](https://github.com/pixel-journey/px-contract-examples-vault)
+> **Catalog:** [px-contract-examples-vault](https://github.com/pixel-journey/px-contract-examples-vault)  
+> **Path:** [TREASURY-TOKEN-LEARNING-PATH.md](https://github.com/pixel-journey/px-contract-examples-vault/blob/main/docs/TREASURY-TOKEN-LEARNING-PATH.md)
 
-**Goal:** Show, with executed tests, that `floor(amount * bps / 10000)` and `floor(pool * shares / totalShares)` can be **zero** while the input is still positive — and that the sum of floors can be **less than the pool**.
+**Goal:** Show that `floor(amount * bps / 10000)` and `floor(pool * shares / totalShares)` can be **zero** while inputs are positive — and that the sum of floors can be **less than the pool**.
 
-**Code under test:** `npm test` (unit + multi-hop / multi-claimer composition) and `node invariants/demo.mjs`. Not wasm, not a claim about any live WAX token's tax.
+**Code under test:** `npm test` and `node invariants/demo.mjs`. Not a live token tax claim.
 
-**Docs:** [docs.wax.io](https://docs.wax.io/). Related: [transfer-tax](https://github.com/pixel-journey/px-token-transfer-tax-burn-treasury).
+## Learning materials
+
+| Doc | Role |
+| --- | --- |
+| [EDUCATION.md](EDUCATION.md) | Beginner → masterclass |
+| [WORKED-EXAMPLES.md](WORKED-EXAMPLES.md) | 30 bps threshold, multi-hop, reward dust |
+| [TIPS.md](TIPS.md) | Design implications |
+| [SECURITY.md](SECURITY.md) | Bounds |
+| [SOURCES.md](SOURCES.md) | Official + related |
 
 ## Composition
 
-`dust.composition.test.ts` walks the exact non-dust threshold, multi-hop tax (net + taken = start), dust hops that never shrink, and a pro-rata claim desk where the sum of floors can be less than the pool.
+Exact non-dust threshold, multi-hop conservation, dust hops that never shrink, pro-rata desk where floors underpay the pool.
 
 ## What is true (executed)
 
@@ -22,7 +31,6 @@
 | `taxBps(334n, 30)` | tax `1` |
 | `minAmountForNonDustTax(30)` | `334` |
 | `rewardShare(100n, 1n, 10000n)` | `0` |
-| Multi-claimer floors | paid can be `< pool` |
 
 ```bash
 npm test

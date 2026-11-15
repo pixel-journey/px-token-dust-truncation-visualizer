@@ -1,34 +1,27 @@
 # Worked examples — integer dust
 
-## Example A — tax threshold at 30 bps
+All math is integer division. Tax rate is **basis points** (10000 = 100%).
 
-```text
-taxBps(333n, 30) → tax 0, net 333   // pure dust
-taxBps(334n, 30) → tax 1, net 333
-minAmountForNonDustTax(30) === 334n
-```
+## taxBps at 30 bps
 
-## Example B — zero bps
+| amount | tax | net |
+| --- | --- | --- |
+| 10_000 | 30 | 9_970 |
+| 1 | 0 | 1 |
+| 333 | 0 | 333 |
+| 334 | 1 | 333 |
 
-Every positive amount is dust for tax purposes; `minAmountForNonDustTax(0)` is `null`.
+`minAmountForNonDustTax(30)` is **334**. Amounts 1..333 are dust at 30 bps (`countDustAmounts` = 333). Zero amount is not labeled dust. Bps 0 → min is null (always dust). 1 bps threshold is 10_000.
 
-## Example C — multi-hop
+10000 bps on 500 → tax 500, net 0.
 
-Apply the same bps several times: `multiHopNet` + `multiHopTaxTaken === start`. Very small starts may never shrink once tax floors to zero each hop.
+## rewardShare
 
-## Example D — reward dust
+`rewardShare(pool 100, shares 1, total 10_000)` → 0 (reward dust).
+`rewardShare(100, 50, 100)` → 50.
+`minSharesForNonDustReward(100, 10_000)` → 100 (first paying share). 99 shares still 0; 100 shares → 1.
+Zero pool → null. totalShares 0 or shares > total refused.
 
-```text
-rewardShare(100n, 1n, 10000n) === 0n
-isRewardDust(100n, 1n, 10000n) === true
-```
+## multiHop
 
-## Example E — multi-claimer remainder
-
-Several floors of `pool * shares / total` can sum to **less than** `pool`. Remainder policy is a product decision (last claimer, treasury, burn).
-
-## Example F — demo script
-
-```bash
-node invariants/demo.mjs
-```
+3 hops at 30 bps on 10_000 stays non-negative. `taxTaken + net === amount`. Hops 0 or 33 refused.

@@ -18,4 +18,4 @@
 | [dex tax](https://github.com/pixel-journey/px-token-dex-differentiated-tax) | Exact pool delivery |
 | [fee splitter](https://github.com/pixel-journey/px-treasury-incoming-fee-splitter) | Last-leg remainder |
 | [masterchef](https://github.com/pixel-journey/px-stake-nft-custodial-masterchef) | Acc-per-share floors |
-| [treasury path](https://github.com/pixel-journey/px-contract-examples-vault/blob/main/docs/TREASURY-TOKEN-LEARNING-PATH.md) | Curriculum + formulas |
+| `px-contract-examples-vault` (private index; not this public course) | Curriculum + formulas |

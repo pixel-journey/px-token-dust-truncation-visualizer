@@ -2,8 +2,8 @@
 
 > **Domain:** token math — dust / truncation  
 > **Sources:** [SOURCES.md](SOURCES.md)  
-> **Catalog:** [px-contract-examples-vault](https://github.com/pixel-journey/px-contract-examples-vault)  
-> **Path:** [TREASURY-TOKEN-LEARNING-PATH.md](https://github.com/pixel-journey/px-contract-examples-vault/blob/main/docs/TREASURY-TOKEN-LEARNING-PATH.md)
+> **Catalog:** `px-contract-examples-vault` (private index; not this public course)  
+> **Path:** `px-contract-examples-vault` (private index; not this public course)
 
 **Goal:** Show that `floor(amount * bps / 10000)` and `floor(pool * shares / totalShares)` can be **zero** while inputs are positive — and that the sum of floors can be **less than the pool**.
 

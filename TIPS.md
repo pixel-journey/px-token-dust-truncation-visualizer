@@ -37,4 +37,4 @@ Amount 0 is not dust. Dust means a **positive** input collapsed to a 0 fee or 0 
 | Round half up | Different dust boundary; retest every neighbor |
 | Higher precision | PXJ stays 8 in this org; do not "fix" dust by changing PXJ precision |
 
-Path: [TREASURY-TOKEN-LEARNING-PATH](https://github.com/pixel-journey/px-contract-examples-vault/blob/main/docs/TREASURY-TOKEN-LEARNING-PATH.md).
+Path: `px-contract-examples-vault` (private index; not this public course).
